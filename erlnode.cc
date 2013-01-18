@@ -5,6 +5,9 @@ extern "C" {
 
 #include <ei.h>
 #include <erl_interface.h>
+
+extern const char *erl_thisnodename(void);
+extern short erl_thiscreation(void);
 #define SELF(fd) erl_mk_pid(erl_thisnodename(), fd, 0, erl_thiscreation())
 
 }
@@ -64,10 +67,6 @@ class ErlNode: ObjectWrap {
       }
 
       hw->sockfd = sockfd;
-
-      extern const char *erl_thisnodename(void);
-      extern short erl_thiscreation(void);
-      
       hw->self = SELF(sockfd);
 
       hw->Wrap(args.This());
