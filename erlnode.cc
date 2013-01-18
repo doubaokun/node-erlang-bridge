@@ -24,29 +24,29 @@ class ErlNode: ObjectWrap {
 
   public:
 
-    static Persistent<FunctionTemplate> s_ct;
+    ErlNode() : m_count(0){}
+    ~ErlNode(){}
+
+    static Persistent<FunctionTemplate> s_erlnode;
 
     static void Init(Handle<Object> target) {
       HandleScope scope;
 
       Local<FunctionTemplate> t = FunctionTemplate::New(New);
 
-      s_ct = Persistent<FunctionTemplate>::New(t);
-      s_ct->InstanceTemplate()->SetInternalFieldCount(1);
-      s_ct->SetClassName(String::NewSymbol("ErlNode"));
+      s_erlnode = Persistent<FunctionTemplate>::New(t);
+      s_erlnode->InstanceTemplate()->SetInternalFieldCount(1);
+      s_erlnode->SetClassName(String::NewSymbol("ErlNode"));
 
-      NODE_SET_PROTOTYPE_METHOD(s_ct, "send_by_name", SendByName);
-      NODE_SET_PROTOTYPE_METHOD(s_ct, "receive", Receive);
-      NODE_SET_PROTOTYPE_METHOD(s_ct, "count", Count);
-      NODE_SET_PROTOTYPE_METHOD(s_ct, "args", Args);
-      NODE_SET_PROTOTYPE_METHOD(s_ct, "info", Info);
+      NODE_SET_PROTOTYPE_METHOD(s_erlnode, "send_by_name", SendByName);
+      NODE_SET_PROTOTYPE_METHOD(s_erlnode, "receive", Receive);
+      NODE_SET_PROTOTYPE_METHOD(s_erlnode, "count", Count);
+      NODE_SET_PROTOTYPE_METHOD(s_erlnode, "args", Args);
+      NODE_SET_PROTOTYPE_METHOD(s_erlnode, "info", Info);
 
-      target->Set(String::NewSymbol("ErlNode"), s_ct->GetFunction());
+      target->Set(String::NewSymbol("ErlNode"), s_erlnode->GetFunction());
     }
-
-    ErlNode() : m_count(0){}
-    ~ErlNode(){}
-
+    
     static Handle<Value> New(const Arguments& args) {
       HandleScope scope;
       ErlNode* hw = new ErlNode();
@@ -165,7 +165,7 @@ class ErlNode: ObjectWrap {
     }
 };
 
-Persistent<FunctionTemplate> ErlNode::s_ct;
+Persistent<FunctionTemplate> ErlNode::s_erlnode;
 
 static void init (Handle<Object> target) {
   ErlNode::Init(target);
