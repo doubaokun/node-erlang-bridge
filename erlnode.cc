@@ -46,7 +46,7 @@ class ErlNode: ObjectWrap {
 
       target->Set(String::NewSymbol("ErlNode"), s_erlnode->GetFunction());
     }
-    
+
     static Handle<Value> New(const Arguments& args) {
       HandleScope scope;
       ErlNode* hw = new ErlNode();
@@ -85,7 +85,7 @@ class ErlNode: ObjectWrap {
       ErlMessage emsg;
       ETERM *msg;
 
-      int status = -1;
+      int status;
 
       status = erl_receive_msg(sockfd, buf, BUFSIZE, &emsg);
 
@@ -103,11 +103,19 @@ class ErlNode: ObjectWrap {
         char* pp;
         pp = erl_iolist_to_string(msg);
 
+        erl_free_term(emsg.msg);
+        erl_free_term(emsg.from);
+        erl_free_term(emsg.to);
+
         Local<String> result = String::New(pp);
         return scope.Close(result);
       } else {
         char* pp;
         pp = erl_iolist_to_string(msg);
+
+        erl_free_term(emsg.msg);
+        erl_free_term(emsg.from);
+        erl_free_term(emsg.to);
 
         Local<String> result = String::New(pp);
         return scope.Close(result);
