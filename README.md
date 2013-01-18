@@ -9,7 +9,7 @@ Only show the way how to send and receive string message.
 ## Configuration and run
 
 1. Start the erlang node service:
-  
+
     erl -sname e1 -setcookie secret
     c(enode).
     enode:start().
